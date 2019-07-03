@@ -38,10 +38,21 @@ describe('filter', function(){
 
 		xit('Should filter words that are derivatives of words from the filter blacklist', function() {
 			assert(filter.clean('shitshit') === '********');
-    });
+		});
+
+		it('Should randomly replace each character of profane words', function() {
+			var customFilter = new Filter({
+				randomReplace: true
+			})
+			let regex = RegExp(/^F[\%\$\#\@\&]+ you/g);
+			assert(regex.test(customFilter.clean('Fuck you')) === true);
+			regex = RegExp(/^B[\%\$\#\@\&]+, you're a C[\%\$\#\@\&]+/g);
+			assert(regex.test(customFilter.clean('Bastard, you\'re a Cunt')) === true);
+		});
+	});
 
     it('Shouldn\'t filter words that aren\'t profane.', function() {
 			assert(filter.clean('hello there') === 'hello there');
-    });
 	});
+
 });
